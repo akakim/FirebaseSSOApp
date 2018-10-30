@@ -3,7 +3,6 @@ package com.akakim.firebasessoapp
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -46,10 +45,14 @@ class MainActivity : AppCompatActivity() {
                     edEmail.text.toString(),
                     edPwd.text.toString())
                     .addOnCompleteListener {
-                        LogUtil.LogVerbose( this@MainActivity,
-                                "이메일과 함께 생성 "
-                        )
 
+                        if( it.isSuccessful ){
+                            LogUtil.LogVerbose(this@MainActivity,"유저가 email에 성공적으로 생성했습니다.")
+                            updateUI(mAuth.currentUser)
+                        } else {
+                            LogUtil.LogVerbose(this@MainActivity,"유저가입 실패 ")
+                            updateUI( null )
+                        }
                     }
 
         }
@@ -109,6 +112,22 @@ class MainActivity : AppCompatActivity() {
 
     }
     fun updateUI(currentUser : FirebaseUser? ){
+
+        currentUser.let {
+
+            var email = currentUser?.email
+
+            var k = 0;
+            while( k < it?.providers!!.size ){
+                var pro : String = it?.providers!!.get( k )
+
+                LogUtil.LogVerbose( this@MainActivity, "k " + k + " : " + pro )
+
+                k++
+            }
+
+
+        }
 
     }
 
